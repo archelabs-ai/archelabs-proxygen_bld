@@ -1,0 +1,12 @@
+# Copyright (c) ArcheLabs
+#
+# Third-party dependencies for proxygen Bazel build
+# This file serves as the root BUILD file for the thirdparty directory
+
+package(default_visibility = ["//visibility:public"])
+
+# Export the BUILD overlay files for http_archive/git_repository
+exports_files([
+    "c-ares.BUILD",
+    "liboqs.BUILD",
+])

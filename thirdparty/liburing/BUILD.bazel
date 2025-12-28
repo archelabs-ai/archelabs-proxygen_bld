@@ -1,0 +1,28 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for liburing (io_uring support library).
+These forward to the actual implementation in @liburing_repo.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export the pre-generated config headers
+exports_files([
+    "config-host.h",
+    "compat.h",
+    "io_uring_version.h",
+])
+
+alias(
+    name = "liburing",
+    actual = "@liburing_repo//:liburing",
+)
+
+alias(
+    name = "uring",
+    actual = "@liburing_repo//:uring",
+)

@@ -1,0 +1,52 @@
+# Copyright (c) ArcheLabs
+#
+# Root BUILD file for archelabs-proxygen_bld
+
+package(default_visibility = ["//visibility:public"])
+
+# Export license file
+exports_files(["LICENSE"])
+
+# ============================================================================
+# Aliases to the main libraries built from external repositories
+# ============================================================================
+
+# Proxygen - Facebook's HTTP library
+alias(
+    name = "proxygen",
+    actual = "@proxygen_repo//:proxygen",
+)
+
+alias(
+    name = "httpserver",
+    actual = "@proxygen_repo//:httpserver",
+)
+
+alias(
+    name = "curl_client",
+    actual = "@proxygen_repo//:curl_client",
+)
+
+# Folly - Facebook's core C++ library
+alias(
+    name = "folly",
+    actual = "@folly_repo//:folly",
+)
+
+# Fizz - Facebook's TLS 1.3 library
+alias(
+    name = "fizz",
+    actual = "@fizz_repo//:fizz",
+)
+
+# Wangle - Facebook's networking library
+alias(
+    name = "wangle",
+    actual = "@wangle_repo//:wangle",
+)
+
+# mvfst - Facebook's QUIC implementation
+alias(
+    name = "mvfst",
+    actual = "@mvfst_repo//:mvfst",
+)

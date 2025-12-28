@@ -1,0 +1,19 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for libev (high-performance event loop library).
+These forward to the actual implementation in @libev_repo.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export the pre-generated config.h for the libev_repo BUILD file
+exports_files(["config.h"])
+
+alias(
+    name = "libev",
+    actual = "@libev_repo//:libev",
+)

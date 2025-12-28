@@ -1,0 +1,52 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the Apache License, Version 2.0.
+# See the LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for wangle - Facebook's networking library.
+
+The actual build is defined in wangle_repo.BUILD which is applied
+to the @wangle_repo git_repository. These aliases allow proxygen
+code to depend on //thirdparty/wangle:wangle or @wangle_repo//:wangle
+interchangeably.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export build macros
+exports_files(["defs.bzl"])
+
+# ============================================================================
+# Combined wangle library (all components)
+# ============================================================================
+
+alias(
+    name = "wangle",
+    actual = "@wangle_repo//:wangle",
+)
+
+# ============================================================================
+# Individual component aliases
+# ============================================================================
+
+alias(name = "acceptor", actual = "@wangle_repo//:acceptor")
+alias(name = "bootstrap", actual = "@wangle_repo//:bootstrap")
+alias(name = "channel", actual = "@wangle_repo//:channel")
+alias(name = "channel_broadcast", actual = "@wangle_repo//:channel_broadcast")
+alias(name = "client_persistence", actual = "@wangle_repo//:client_persistence")
+alias(name = "client_ssl", actual = "@wangle_repo//:client_ssl")
+alias(name = "codec", actual = "@wangle_repo//:codec")
+alias(name = "service", actual = "@wangle_repo//:service")
+alias(name = "ssl", actual = "@wangle_repo//:ssl")
+alias(name = "util", actual = "@wangle_repo//:util")
+
+# ============================================================================
+# Test support aliases
+# ============================================================================
+
+alias(name = "test_main", actual = "@wangle_repo//:test_main")
+alias(name = "acceptor_test_lib", actual = "@wangle_repo//:acceptor_test_lib")
+alias(name = "bootstrap_test_lib", actual = "@wangle_repo//:bootstrap_test_lib")
+alias(name = "channel_test_lib", actual = "@wangle_repo//:channel_test_lib")
+alias(name = "ssl_test_lib", actual = "@wangle_repo//:ssl_test_lib")

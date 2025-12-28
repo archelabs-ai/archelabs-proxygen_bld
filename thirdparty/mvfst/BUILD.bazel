@@ -1,0 +1,53 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for mvfst - Facebook's QUIC implementation.
+
+The actual build is defined in mvfst_repo.BUILD which is applied
+to the @mvfst_repo git_repository. These aliases allow proxygen
+code to depend on //thirdparty/mvfst:quic or @mvfst_repo//:quic
+interchangeably.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export build macros
+exports_files(["defs.bzl"])
+
+# ============================================================================
+# Main mvfst/quic library
+# ============================================================================
+
+alias(
+    name = "mvfst",
+    actual = "@mvfst_repo//:quic",
+)
+
+alias(
+    name = "quic",
+    actual = "@mvfst_repo//:quic",
+)
+
+# ============================================================================
+# io_uring variant (high-performance Linux backend)
+# ============================================================================
+
+alias(
+    name = "mvfst_uring",
+    actual = "@mvfst_repo//:quic_uring",
+)
+
+alias(
+    name = "quic_uring",
+    actual = "@mvfst_repo//:quic_uring",
+)
+
+# ============================================================================
+# Test support aliases
+# ============================================================================
+
+alias(name = "quic_test_lib", actual = "@mvfst_repo//:quic_test_lib")
+alias(name = "quic_test_main", actual = "@mvfst_repo//:quic_test_main")

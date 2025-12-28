@@ -1,0 +1,149 @@
+# Copyright (c) ArcheLabs
+#
+# Bazel module for building proxygen from source.
+#
+# This repository provides BUILD files to build Facebook's proxygen HTTP library
+# and its dependencies (folly, fizz, wangle, mvfst) from source using Bazel.
+
+module(
+    name = "archelabs_proxygen_bld",
+    version = "2025.12.15.00",
+)
+
+# ============================================================================
+# Core Bazel rules and dependencies with native bzlmod support
+# ============================================================================
+
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "googletest", version = "1.16.0", repo_name = "googletest")
+bazel_dep(name = "fmt", version = "11.1.4")
+bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
+bazel_dep(name = "abseil-cpp", version = "20240722.0", repo_name = "com_google_absl")
+bazel_dep(name = "cmake_configure_file", version = "0.1.1")
+
+# Libraries from BCR
+bazel_dep(name = "zstd", version = "1.5.7")
+bazel_dep(name = "double-conversion", version = "3.3.0")
+bazel_dep(name = "gflags", version = "2.2.2")
+bazel_dep(name = "glog", version = "0.7.1")
+bazel_dep(name = "libevent", version = "2.1.12-stable.bcr.0")
+bazel_dep(name = "lz4", version = "1.10.0.bcr.1")
+bazel_dep(name = "fast_float", version = "8.0.2")
+bazel_dep(name = "bzip2", version = "1.0.8.bcr.2")
+bazel_dep(name = "openssl", version = "3.3.1.bcr.1")
+bazel_dep(name = "snappy", version = "1.2.1")
+bazel_dep(name = "xz", version = "5.4.5.bcr.5")
+
+# Boost modules - required by folly
+bazel_dep(name = "boost.algorithm", version = "1.87.0")
+bazel_dep(name = "boost.container", version = "1.87.0")
+bazel_dep(name = "boost.context", version = "1.87.0")
+bazel_dep(name = "boost.core", version = "1.87.0")
+bazel_dep(name = "boost.crc", version = "1.87.0")
+bazel_dep(name = "boost.filesystem", version = "1.87.0")
+bazel_dep(name = "boost.intrusive", version = "1.87.0")
+bazel_dep(name = "boost.multi_index", version = "1.87.0")
+bazel_dep(name = "boost.preprocessor", version = "1.87.0")
+bazel_dep(name = "boost.program_options", version = "1.87.0")
+bazel_dep(name = "boost.regex", version = "1.87.0")
+bazel_dep(name = "boost.system", version = "1.87.0")
+bazel_dep(name = "boost.thread", version = "1.87.0")
+bazel_dep(name = "boost.utility", version = "1.87.0")
+bazel_dep(name = "boost.variant", version = "1.87.0")
+
+# Additional deps for folly
+bazel_dep(name = "libdwarf", version = "0.12.0.bcr.1")
+bazel_dep(name = "libunwind", version = "1.8.1")
+
+# Additional deps for fizz
+bazel_dep(name = "libsodium", version = "1.0.19")
+
+# Additional deps for mvfst
+bazel_dep(name = "boost.iterator", version = "1.87.0")
+
+# ============================================================================
+# Facebook Libraries - fetched from git and built with our BUILD overlays
+# ============================================================================
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# Proxygen - Facebook's HTTP library (the main target)
+git_repository(
+    name = "proxygen_repo",
+    remote = "https://github.com/facebook/proxygen.git",
+    tag = "v2025.12.15.00",
+    build_file = "//proxygen:proxygen_repo.BUILD",
+)
+
+# Folly - Facebook's core C++ library
+git_repository(
+    name = "folly_repo",
+    remote = "https://github.com/facebook/folly.git",
+    tag = "v2025.12.15.00",
+    build_file = "//thirdparty/folly:folly_repo.BUILD",
+)
+
+# Fizz - Facebook's TLS 1.3 library
+git_repository(
+    name = "fizz_repo",
+    remote = "https://github.com/facebookincubator/fizz.git",
+    tag = "v2025.12.15.00",
+    build_file = "//thirdparty/fizz:fizz_repo.BUILD",
+)
+
+# Wangle - Facebook's networking library
+git_repository(
+    name = "wangle_repo",
+    remote = "https://github.com/facebook/wangle.git",
+    tag = "v2025.12.22.00",
+    build_file = "//thirdparty/wangle:wangle_repo.BUILD",
+)
+
+# mvfst - Facebook's QUIC implementation
+git_repository(
+    name = "mvfst_repo",
+    remote = "https://github.com/facebook/mvfst.git",
+    tag = "v2025.12.22.00",
+    build_file = "//thirdparty/mvfst:mvfst_repo.BUILD",
+)
+
+# ============================================================================
+# Additional dependencies via http_archive
+# ============================================================================
+
+# libev - High-performance event loop library (used by mvfst's LibevQuicEventBase)
+http_archive(
+    name = "libev_repo",
+    urls = ["https://dist.schmorp.de/libev/libev-4.33.tar.gz"],
+    strip_prefix = "libev-4.33",
+    build_file = "//thirdparty/libev:libev_repo.BUILD",
+)
+
+# liburing - io_uring support library (used by folly and mvfst for async I/O)
+http_archive(
+    name = "liburing_repo",
+    urls = ["https://github.com/axboe/liburing/archive/refs/tags/liburing-2.13.tar.gz"],
+    strip_prefix = "liburing-liburing-2.13",
+    build_file = "//thirdparty/liburing:liburing_repo.BUILD",
+)
+
+# c-ares - Asynchronous DNS resolver library
+http_archive(
+    name = "c-ares",
+    urls = ["https://github.com/c-ares/c-ares/releases/download/v1.34.5/c-ares-1.34.5.tar.gz"],
+    sha256 = "7d935790e9af081c25c495fd13c2cfcda4792983418e96358ef6e7320ee06346",
+    strip_prefix = "c-ares-1.34.5",
+    build_file = "//thirdparty:c-ares.BUILD",
+)
+
+# liboqs - Open Quantum Safe library
+http_archive(
+    name = "liboqs",
+    urls = ["https://github.com/open-quantum-safe/liboqs/archive/refs/tags/0.12.0.tar.gz"],
+    sha256 = "df999915204eb1eba311d89e83d1edd3a514d5a07374745d6a9e5b2dd0d59c08",
+    strip_prefix = "liboqs-0.12.0",
+    build_file = "//thirdparty:liboqs.BUILD",
+)

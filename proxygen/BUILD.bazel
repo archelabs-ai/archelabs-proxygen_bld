@@ -1,0 +1,8 @@
+# Copyright (c) ArcheLabs
+# BUILD file for proxygen package - holds overlay BUILD files
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "proxygen_repo.BUILD",
+])

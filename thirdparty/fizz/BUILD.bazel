@@ -1,0 +1,46 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for fizz - Facebook's TLS 1.3 library.
+
+The actual build is defined in fizz_repo.BUILD which is applied
+to the @fizz_repo git_repository. These aliases allow proxygen
+code to depend on //thirdparty/fizz:fizz or @fizz_repo//:fizz
+interchangeably.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export the pre-generated config header and build macros
+exports_files(["fizz-config.h", "defs.bzl"])
+
+# ============================================================================
+# Main fizz alias
+# ============================================================================
+
+alias(
+    name = "fizz",
+    actual = "@fizz_repo//:fizz",
+)
+
+# ============================================================================
+# Component aliases
+# ============================================================================
+
+alias(name = "backend", actual = "@fizz_repo//:fizz")
+alias(name = "client", actual = "@fizz_repo//:fizz")
+alias(name = "crypto", actual = "@fizz_repo//:fizz")
+alias(name = "protocol", actual = "@fizz_repo//:fizz")
+alias(name = "record", actual = "@fizz_repo//:fizz")
+alias(name = "server", actual = "@fizz_repo//:fizz")
+alias(name = "compression", actual = "@fizz_repo//:fizz")
+alias(name = "extensions", actual = "@fizz_repo//:fizz")
+alias(name = "util", actual = "@fizz_repo//:fizz")
+
+# Test utilities
+alias(name = "fizz_test_lib", actual = "@fizz_repo//:fizz_test_lib")
+alias(name = "fizz_test_main", actual = "@fizz_repo//:fizz_test_main")
+alias(name = "fizz_protocol_cert_util", actual = "@fizz_repo//:fizz_protocol_cert_util")

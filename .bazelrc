@@ -1,0 +1,45 @@
+# Copyright (c) ArcheLabs
+#
+# Bazel configuration for building proxygen and dependencies.
+
+# Don't re-build when in a different shell.
+build --incompatible_strict_action_env
+
+# Use C++20 by default
+build --cxxopt=-std=c++20
+build --host_cxxopt=-std=c++20
+
+# Enable coroutines for folly
+build --cxxopt=-fcoroutines
+
+# Enable position independent code
+build --copt=-fPIC
+
+# Compiler warnings
+build --copt=-Wall
+build --copt=-Wextra
+build --copt=-Wno-unused-parameter
+build --copt=-Wno-missing-field-initializers
+
+# Optimization settings for different configurations
+build:opt --compilation_mode=opt
+build:opt --copt=-O3
+build:opt --copt=-DNDEBUG
+
+build:dbg --compilation_mode=dbg
+build:dbg --copt=-O0
+build:dbg --copt=-g
+
+# Enable threading
+build --copt=-pthread
+build --linkopt=-pthread
+
+# Use bzlmod for dependency management (MODULE.bazel)
+common --enable_bzlmod
+
+# Test configuration
+test --test_output=errors
+test --test_verbose_timeout_warnings
+
+# Platform configuration
+build --incompatible_enable_cc_toolchain_resolution

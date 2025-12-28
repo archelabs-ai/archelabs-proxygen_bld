@@ -1,0 +1,69 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Alias targets for folly - Facebook's core C++ library.
+
+The actual build is defined in folly_repo.BUILD which is applied
+to the @folly_repo git_repository. These aliases allow proxygen
+code to depend on //thirdparty/folly:folly or @folly_repo//:folly
+interchangeably.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+# Export the pre-generated config header and build macros
+exports_files(["folly-config.h", "defs.bzl", "folly_test_main.cpp"])
+
+# ============================================================================
+# Main folly alias
+# ============================================================================
+
+alias(
+    name = "folly",
+    actual = "@folly_repo//:folly",
+)
+
+# ============================================================================
+# io_uring variant (high-performance Linux backend)
+# ============================================================================
+
+alias(
+    name = "folly_uring",
+    actual = "@folly_repo//:folly_uring",
+)
+
+# ============================================================================
+# Convenience aliases for granular dependencies
+# ============================================================================
+
+alias(name = "traits", actual = "@folly_repo//:traits")
+alias(name = "portability", actual = "@folly_repo//:portability")
+alias(name = "range", actual = "@folly_repo//:range")
+alias(name = "c_portability", actual = "@folly_repo//:c_portability")
+alias(name = "config", actual = "@folly_repo//:config")
+alias(name = "utility", actual = "@folly_repo//:utility")
+alias(name = "cpp_attributes", actual = "@folly_repo//:cpp_attributes")
+alias(name = "preprocessor", actual = "@folly_repo//:preprocessor")
+alias(name = "string", actual = "@folly_repo//:string")
+alias(name = "fbstring", actual = "@folly_repo//:fbstring")
+alias(name = "conv", actual = "@folly_repo//:conv")
+alias(name = "format", actual = "@folly_repo//:format")
+alias(name = "likely", actual = "@folly_repo//:likely")
+alias(name = "exception", actual = "@folly_repo//:exception")
+alias(name = "exception_wrapper", actual = "@folly_repo//:exception_wrapper")
+alias(name = "optional", actual = "@folly_repo//:optional")
+alias(name = "expected", actual = "@folly_repo//:expected")
+alias(name = "small_vector", actual = "@folly_repo//:small_vector")
+alias(name = "singleton", actual = "@folly_repo//:singleton")
+alias(name = "memory", actual = "@folly_repo//:memory")
+alias(name = "synchronized", actual = "@folly_repo//:synchronized")
+alias(name = "function", actual = "@folly_repo//:function")
+alias(name = "network_address", actual = "@folly_repo//:network_address")
+alias(name = "socket_address", actual = "@folly_repo//:socket_address")
+alias(name = "hash", actual = "@folly_repo//:hash")
+alias(name = "io", actual = "@folly_repo//:io")
+alias(name = "net", actual = "@folly_repo//:net")
+alias(name = "system", actual = "@folly_repo//:system")
