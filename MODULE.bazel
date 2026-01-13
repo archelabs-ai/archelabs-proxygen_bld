@@ -6,7 +6,7 @@
 # and its dependencies (folly, fizz, wangle, mvfst) from source using Bazel.
 
 module(
-    name = "archelabs_proxygen_bld",
+    name = "al_proxygen",
     version = "2025.12.15.00",
 )
 

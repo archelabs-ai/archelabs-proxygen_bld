@@ -14,7 +14,7 @@ with a focus on building client/server abstractions.
 """
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//thirdparty/wangle:defs.bzl", "wangle_cc_test", "WANGLE_TEST_COPTS")
+load("@al_proxygen//thirdparty/wangle:defs.bzl", "wangle_cc_test", "WANGLE_TEST_COPTS")
 
 package(default_visibility = ["//visibility:public"])
 

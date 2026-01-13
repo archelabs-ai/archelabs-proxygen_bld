@@ -14,7 +14,7 @@ complex circular dependencies between components.
 """
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//thirdparty/mvfst:defs.bzl", "mvfst_cc_test", "MVFST_TEST_COPTS")
+load("@al_proxygen//thirdparty/mvfst:defs.bzl", "mvfst_cc_test", "MVFST_TEST_COPTS")
 
 package(default_visibility = ["//visibility:public"])
 

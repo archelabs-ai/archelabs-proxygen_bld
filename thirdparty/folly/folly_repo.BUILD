@@ -12,7 +12,7 @@ in git_repository. It builds folly as a monolithic library.
 
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//thirdparty/folly:defs.bzl", "folly_cc_test", "folly_cc_singleton_test", "folly_test_main_library", "FOLLY_TEST_COPTS")
+load("@al_proxygen//thirdparty/folly:defs.bzl", "folly_cc_test", "folly_cc_singleton_test", "folly_test_main_library", "FOLLY_TEST_COPTS")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -43,7 +43,7 @@ config_setting(
 # Copy the pre-generated config header from thirdparty/folly to the expected location
 genrule(
     name = "folly_config_h",
-    srcs = ["@//thirdparty/folly:folly-config.h"],
+    srcs = ["@al_proxygen//thirdparty/folly:folly-config.h"],
     outs = ["folly/folly-config.h"],
     cmd = "cp $< $@",
     visibility = ["//visibility:public"],

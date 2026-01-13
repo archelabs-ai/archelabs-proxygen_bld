@@ -27,7 +27,7 @@ exports_files(["LICENSE", "COPYING"])
 # Copy config-host.h from thirdparty/liburing
 genrule(
     name = "config_host_h",
-    srcs = ["@//thirdparty/liburing:config-host.h"],
+    srcs = ["@al_proxygen//thirdparty/liburing:config-host.h"],
     outs = ["config-host.h"],
     cmd = "cp $< $@",
 )
@@ -35,7 +35,7 @@ genrule(
 # Copy compat.h from thirdparty/liburing to proper location
 genrule(
     name = "compat_h",
-    srcs = ["@//thirdparty/liburing:compat.h"],
+    srcs = ["@al_proxygen//thirdparty/liburing:compat.h"],
     outs = ["src/include/liburing/compat.h"],
     cmd = "cp $< $@",
 )
@@ -43,7 +43,7 @@ genrule(
 # Copy io_uring_version.h from thirdparty/liburing to proper location
 genrule(
     name = "io_uring_version_h",
-    srcs = ["@//thirdparty/liburing:io_uring_version.h"],
+    srcs = ["@al_proxygen//thirdparty/liburing:io_uring_version.h"],
     outs = ["src/include/liburing/io_uring_version.h"],
     cmd = "cp $< $@",
 )

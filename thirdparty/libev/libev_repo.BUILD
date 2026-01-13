@@ -23,7 +23,7 @@ exports_files(["LICENSE"])
 # Pre-generated config.h for Linux
 genrule(
     name = "config_h",
-    srcs = ["@//thirdparty/libev:config.h"],
+    srcs = ["@al_proxygen//thirdparty/libev:config.h"],
     outs = ["config.h"],
     cmd = "cp $< $@",
 )

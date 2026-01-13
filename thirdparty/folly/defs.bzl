@@ -23,7 +23,7 @@ def folly_test_main_library():
     """
     cc_library(
         name = "folly_test_main",
-        srcs = ["@//thirdparty/folly:folly_test_main.cpp"],
+        srcs = ["@al_proxygen//thirdparty/folly:folly_test_main.cpp"],
         deps = [
             ":folly",
             "@googletest//:gtest",

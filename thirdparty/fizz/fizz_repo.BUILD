@@ -13,7 +13,7 @@ Fizz is Facebook's implementation of TLS 1.3.
 """
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
-load("@//thirdparty/fizz:defs.bzl", "fizz_cc_test", "FIZZ_TEST_COPTS")
+load("@al_proxygen//thirdparty/fizz:defs.bzl", "fizz_cc_test", "FIZZ_TEST_COPTS")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -30,7 +30,7 @@ exports_files([
 # Copy the pre-generated config header from thirdparty/fizz to the expected location
 genrule(
     name = "fizz_config_h",
-    srcs = ["@//thirdparty/fizz:fizz-config.h"],
+    srcs = ["@al_proxygen//thirdparty/fizz:fizz-config.h"],
     outs = ["fizz/fizz-config.h"],
     cmd = "cp $< $@",
     visibility = ["//visibility:public"],
