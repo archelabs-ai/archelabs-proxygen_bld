@@ -9,6 +9,13 @@ build --incompatible_strict_action_env
 build --cxxopt=-std=c++20
 build --host_cxxopt=-std=c++20
 
+# C11 by default for C code
+build --conlyopt=-std=c11
+
+# OpenSSL requires GNU extensions (gnu11) for macros like GETU32/PUTU32
+# Use per-file copts to avoid forcing gnu11 globally
+build --per_file_copt=external/openssl\\+/.*\\.c@-std=gnu11
+
 # Enable coroutines for folly
 build --cxxopt=-fcoroutines
 
@@ -20,15 +27,6 @@ build --copt=-Wall
 build --copt=-Wextra
 build --copt=-Wno-unused-parameter
 build --copt=-Wno-missing-field-initializers
-
-# Optimization settings for different configurations
-build:opt --compilation_mode=opt
-build:opt --copt=-O3
-build:opt --copt=-DNDEBUG
-
-build:dbg --compilation_mode=dbg
-build:dbg --copt=-O0
-build:dbg --copt=-g
 
 # Enable threading
 build --copt=-pthread
@@ -43,3 +41,52 @@ test --test_verbose_timeout_warnings
 
 # Platform configuration
 build --incompatible_enable_cc_toolchain_resolution
+
+# =============================================================================
+# Build Configurations: gcc/clang × opt/dbg
+# Usage: bazel build --config=gcc-opt //target
+#        bazel build --config=clang-dbg //target
+# =============================================================================
+
+# --- Base compiler configs ---
+# GCC (default, no extra flags needed)
+build:gcc --repo_env=CC=gcc
+build:gcc --repo_env=CXX=g++
+
+# Clang
+build:clang --repo_env=CC=clang
+build:clang --repo_env=CXX=clang++
+build:clang --copt=-Wno-unused-command-line-argument
+build:clang --linkopt=-l:libatomic.a
+
+# --- Base optimization configs ---
+# Debug build
+build:dbg --compilation_mode=dbg
+build:dbg --copt=-g
+build:dbg --copt=-O0
+build:dbg --copt=-DDEBUG=1
+build:dbg --strip=never
+
+# Optimized build
+build:opt --compilation_mode=opt
+build:opt --copt=-O3
+build:opt --copt=-DNDEBUG
+build:opt --copt=-flto
+build:opt --linkopt=-flto
+
+# --- Combined configs (compiler + optimization) ---
+# GCC + Debug
+build:gcc-dbg --config=gcc
+build:gcc-dbg --config=dbg
+
+# GCC + Optimized
+build:gcc-opt --config=gcc
+build:gcc-opt --config=opt
+
+# Clang + Debug
+build:clang-dbg --config=clang
+build:clang-dbg --config=dbg
+
+# Clang + Optimized
+build:clang-opt --config=clang
+build:clang-opt --config=opt
