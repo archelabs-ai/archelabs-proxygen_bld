@@ -5,9 +5,9 @@
 +
  def gen_test_targets(name, cc_srcs):
      """Generates a cc_test target for each source file.
- 
+
 @@ -8,7 +10,7 @@ def gen_test_targets(name, cc_srcs):
- 
+
      for src in cc_srcs:
          name = src.removeprefix("test/test_").removesuffix(".c").replace("/", "_") + "_test"
 -        native.cc_test(
