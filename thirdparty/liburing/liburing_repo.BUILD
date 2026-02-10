@@ -99,7 +99,7 @@ cc_library(
         "-Wextra",
         "-fno-stack-protector",
         "-include",
-        "$(GENDIR)/external/+_repo_rules+liburing_repo/config-host.h",
+        "$(GENDIR)/external/+http_archive+liburing_repo/config-host.h",
         # Suppress warnings
         "-Wno-unused-parameter",
         "-Wno-sign-compare",
