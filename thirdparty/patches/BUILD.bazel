@@ -1,0 +1,11 @@
+# Copyright (c) ArcheLabs
+# Patches for external dependencies to support Bazel 8+
+
+exports_files([
+    "fast_float_bzl8.patch",
+    "fast_float_module.patch",
+    "snappy_bzl8.patch",
+    "snappy_module.patch",
+    "libunwind_bzl8.patch",
+    "libdwarf_bzl8.patch",
+])

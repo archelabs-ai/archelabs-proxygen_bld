@@ -1,0 +1,9 @@
+--- MODULE.bazel
++++ MODULE.bazel
+@@ -4,4 +4,6 @@ module(
+     compatibility_level = 6,
+ )
+ 
++bazel_dep(name = "rules_cc", version = "0.1.1")
++
+ bazel_dep(name = "doctest", version = "2.4.11", dev_dependency = True)
