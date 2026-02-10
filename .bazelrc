@@ -4,6 +4,7 @@
 
 # Don't re-build when in a different shell.
 build --incompatible_strict_action_env
+build --incompatible_disallow_empty_glob=false
 
 # Use C++20 by default
 build --cxxopt=-std=c++20
