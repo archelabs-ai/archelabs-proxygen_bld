@@ -150,7 +150,10 @@ git_repository(
 # libev - High-performance event loop library (used by mvfst's LibevQuicEventBase)
 http_archive(
     name = "libev_repo",
-    urls = ["https://dist.schmorp.de/libev/libev-4.33.tar.gz"],
+    urls = [
+        "https://deb.debian.org/debian/pool/main/libe/libev/libev_4.33.orig.tar.gz",
+    ],
+    sha256 = "507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea",
     strip_prefix = "libev-4.33",
     build_file = "//thirdparty/libev:libev_repo.BUILD",
 )
