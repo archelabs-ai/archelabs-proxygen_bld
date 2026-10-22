@@ -8,4 +8,5 @@ exports_files([
     "snappy_module.patch",
     "libunwind_bzl8.patch",
     "libdwarf_bzl8.patch",
+    "folly_crc_pclmul_runtime_check.patch",
 ])

@@ -1,0 +1,22 @@
+--- folly/hash/Checksum.cpp
++++ folly/hash/Checksum.cpp
+@@ -78,7 +78,8 @@
+
+ bool crc32c_hw_supported_sse42() {
+   static folly::CpuId id;
+-  return id.sse42();
++  // The hardware CRC paths also use PCLMULQDQ, which SSE4.2 does not imply.
++  return id.sse42() && id.pclmuldq();
+ }
+
+ bool crc32c_hw_supported_avx512() {
+@@ -89,7 +90,8 @@
+
+ bool crc32_hw_supported() {
+   static folly::CpuId id;
+-  return id.sse42();
++  // The hardware CRC paths also use PCLMULQDQ, which SSE4.2 does not imply.
++  return id.sse42() && id.pclmuldq();
+ }
+
+ bool crc32c_hw_supported_neon() {

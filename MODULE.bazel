@@ -117,6 +117,8 @@ git_repository(
     remote = "https://github.com/facebook/folly.git",
     tag = "v2025.12.15.00",
     build_file = "//thirdparty/folly:folly_repo.BUILD",
+    # Hardware CRC paths use PCLMULQDQ, which SSE4.2 does not imply.
+    patches = ["//thirdparty/patches:folly_crc_pclmul_runtime_check.patch"],
 )
 
 # Fizz - Facebook's TLS 1.3 library

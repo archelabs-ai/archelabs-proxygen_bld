@@ -160,14 +160,13 @@ filegroup(
 cc_library(
     name = "fast_crc32_sse",
     srcs = ["folly/external/fast-crc32/sse_crc32c_v8s3x3.cpp"],
-    hdrs = ["folly/external/fast-crc32/sse_crc32c_v8s3x3.h"],
+    hdrs = [":folly_headers"],
     copts = [
         "-std=c++20",
         "-msse4.2",
         "-mpclmul",
     ],
     includes = ["."],
-    deps = [":folly"],
     visibility = ["//visibility:public"],
 )
 
@@ -223,6 +222,15 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+# Folly compiles these CRC sources with -mpclmul on x86-64 only (CMakeLists.txt
+# in v2025.12.15.00). They live in :folly_crc_pclmul so the option reaches no
+# other Folly source and no other architecture.
+FOLLY_PCLMUL_SOURCES = [
+    "folly/hash/detail/ChecksumDetail.cpp",
+    "folly/hash/detail/Crc32CombineDetail.cpp",
+    "folly/hash/detail/Crc32cDetail.cpp",
+]
+
 # ============================================================================
 # Main folly library
 # ============================================================================
@@ -231,7 +239,7 @@ cc_library(
     name = "folly",
     srcs = glob(
         ["folly/**/*.cpp"],
-        exclude = EXCLUDED_SOURCES,
+        exclude = EXCLUDED_SOURCES + FOLLY_PCLMUL_SOURCES,
     ),
     hdrs = [":folly_headers"],
     copts = [
@@ -323,7 +331,10 @@ cc_library(
         "@libunwind",
         "@libevent//:event",
         "@libsodium",
-    ],
+    ] + [":folly_crc_pclmul"] + select({
+        "@platforms//cpu:x86_64": [":fast_crc32_sse"],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
 )
 
@@ -415,13 +426,32 @@ FOLLY_DEPS = [
     "@libunwind",
     "@libevent//:event",
     "@libsodium",
-]
+] + select({
+    "@platforms//cpu:x86_64": [":fast_crc32_sse"],
+    "//conditions:default": [],
+})
+
+cc_library(
+    name = "folly_crc_pclmul",
+    srcs = FOLLY_PCLMUL_SOURCES,
+    hdrs = [":folly_headers"],
+    copts = FOLLY_COPTS + select({
+        "@platforms//cpu:x86_64": ["-mpclmul"],
+        "//conditions:default": [],
+    }),
+    local_defines = FOLLY_DEFINES + select({
+        "@platforms//os:linux": FOLLY_LINUX_DEFINES,
+        "//conditions:default": [],
+    }),
+    includes = ["."],
+    deps = FOLLY_DEPS,
+)
 
 cc_library(
     name = "folly_uring",
     srcs = glob(
         ["folly/**/*.cpp"],
-        exclude = EXCLUDED_SOURCES_URING,
+        exclude = EXCLUDED_SOURCES_URING + FOLLY_PCLMUL_SOURCES,
     ),
     hdrs = [":folly_headers"],
     copts = FOLLY_COPTS,
@@ -441,6 +471,7 @@ cc_library(
     include_prefix = "",
     deps = FOLLY_DEPS + [
         "@liburing_repo//:liburing",  # io_uring support
+        ":folly_crc_pclmul",
     ],
     visibility = ["//visibility:public"],
 )
